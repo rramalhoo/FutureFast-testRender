@@ -1,3 +1,2 @@
-# Configurações da API OpenAI, aqui vai a chave da  API mas vou enviar
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "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"
 OPENAI_ORGANIZATION = "org-rOGg61vfxOepmz3Z0mja8oEI"
