@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!-- ... (cabeçalho igual ao anterior) ... -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digitar Problema</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div id="digitar-page">
+        
+        <a href="index.html" class="header-logo-link">
+            <img src="/static/logo.png" alt="Logo - Voltar ao Início" class="logo-img">
+        </a>
+        
+        <a href="sobre.html" class="close-btn" aria-label="Voltar">
+            &times; 
+        </a>
+
+        <div class="text-container">
+            <div class="text-card">
+                <label for="user-text">Qual é o seu problema?</label>
+                <textarea id="user-text" placeholder="Digite seu problema aqui..."></textarea>
+            </div>
+            
+            <a href="#" id="submit-btn" class="btn">Enviar</a>
+
+            <!-- O Elemento do Timer foi REMOVIDO daqui -->
+
+        </div>
+
+    </div>
+
+    <!-- ============================================
+    == SCRIPT (A "PONTE" PARA O PYTHON) ==
+    ============================================ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const params = new URLSearchParams(window.location.search);
+            const nomeUsuario = params.get('nome') || 'Visitante'; 
+
+            const submitButton = document.getElementById('submit-btn');
+            const userText = document.getElementById('user-text');
+            
+            // Variável do timer de segundos foi REMOVIDA
+            let loadingInterval = null;
+
+            const handleSubmit = async () => {
+                const problemaUsuario = userText.value;
+
+                if (!problemaUsuario.trim()) {
+                    console.warn('O usuário não digitou um problema.');
+                    userText.style.border = '2px solid red';
+                    return;
+                }
+                userText.style.border = 'none';
+
+                submitButton.classList.add('loading');
+                
+                // Limpa o interval anterior
+                if (loadingInterval) clearInterval(loadingInterval); 
+                
+                // --- Animação dos pontinhos (mantida) ---
+                let dotCount = 0;
+                const dots = ["", ".", "..", "..."];
+                submitButton.textContent = 'Gerando'; 
+                loadingInterval = setInterval(() => {
+                    dotCount = (dotCount + 1) % 4; 
+                    submitButton.textContent = 'Gerando' + dots[dotCount];
+                }, 400); 
+
+                // --- O código do Timer de Segundos foi REMOVIDO daqui ---
+
+
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/gerar_solucao_e_imagem', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            nome: nomeUsuario,
+                            problema: problemaUsuario 
+                        })
+                    });
+
+                    const data = await response.json();
+                    
+                    // --- Para o timer de pontinhos em caso de sucesso ---
+                    clearInterval(loadingInterval);
+
+                    if (response.ok) {
+                        const textoSolucao = encodeURIComponent(data.texto_solucao);
+                        const imageUrl = encodeURIComponent(data.imagem_url);
+                        window.location.href = `resultadoTextoIa.html?solucao=${textoSolucao}&imagem_url=${imageUrl}`;
+                    } else {
+                        throw new Error(data.erro || 'Erro desconhecido');
+                    }
+
+                } catch (error) {
+                    // --- Para o timer de pontinhos em caso de erro ---
+                    clearInterval(loadingInterval);
+                    
+                    console.error('Erro ao gerar conteúdo:', error);
+                    submitButton.textContent = error.message || 'Erro! Tente novamente.';
+                    setTimeout(() => {
+                        submitButton.classList.remove('loading');
+                        submitButton.textContent = 'Enviar';
+                    }, 3000);
+                }
+            };
+
+            // ... (Ouvintes de clique e teclado permanecem iguais) ...
+            submitButton.addEventListener('click', (event) => {
+                event.preventDefault(); 
+                handleSubmit();
+            });
+
+            userText.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault(); 
+                    handleSubmit();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

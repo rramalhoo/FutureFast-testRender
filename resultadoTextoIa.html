@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sua Solução</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Link para o seu arquivo CSS (ele já tem os estilos) -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div id="resultado-page">
+        
+        <a href="index.html" class="header-logo-link">
+            <img src="/static/logo.png" alt="Logo - Voltar ao Início" class="logo-img">
+        </a>
+        
+        <a href="sobre.html" class="close-btn" aria-label="Voltar">
+            &times; 
+        </a>
+
+        <div class="resultado-container">
+            
+            <!-- Cartão da Esquerda (AGORA MOSTRA A SOLUÇÃO) -->
+            <div class="resultado-card-ia">
+                <!-- O ID 'solution-text' será usado pelo JavaScript -->
+                <p id="solution-text" style="text-align: left; font-size: 1.1rem; line-height: 1.6;">
+                    Carregando solução...
+                </p>
+            </div>
+            
+            <!-- Cartão da Direita (Imagem Gerada) -->
+            <div class="resultado-card-imagem">
+                <img id="generated-image-result" 
+                     src="https://placehold.co/400x400/3F5659/EAF0F2?text=Carregando..." 
+                     alt="Imagem gerada pela IA">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 
+      Este script vai pegar AMBOS os dados da URL 
+      e preencher a página.
+    -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            
+            // 1. Pegar o TEXTO DA SOLUÇÃO
+            const textoSolucao = params.get('solucao');
+            const solutionElement = document.getElementById('solution-text');
+            
+            if (textoSolucao) {
+                solutionElement.textContent = decodeURIComponent(textoSolucao);
+            } else {
+                solutionElement.textContent = 'Não foi possível carregar a solução.';
+            }
+
+            // 2. Pegar a URL DA IMAGEM
+            const imageUrl = params.get('imagem_url');
+            const imgElement = document.getElementById('generated-image-result');
+
+            if (imageUrl) {
+                imgElement.src = decodeURIComponent(imageUrl);
+            } else {
+                imgElement.alt = "Não foi possível carregar a imagem.";
+            }
+        });
+    </script>
+
+</body>
+</html>

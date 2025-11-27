@@ -1,0 +1,395 @@
+/* Reset Básico e Configuração da Fonte */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden; 
+}
+
+body {
+    /* Imagem de fundo com overlay escuro */
+    background: linear-gradient(rgba(10, 40, 45, 0.7), rgba(10, 40, 45, 0.7)), url('/static/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* --- Componentes Reutilizáveis --- */
+
+/* Botão Principal */
+.btn {
+    display: inline-block; 
+    padding: 14px 45px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #eaf0f2;
+    background-color: #6a9a9b;
+    border: none;
+    border-radius: 50px; 
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-decoration: none; 
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    min-width: 150px; /* Largura mínima para o botão */
+    box-sizing: border-box;
+}
+.btn:hover {
+    background-color: #588384; 
+    transform: scale(1.03); 
+}
+/* Estilo do botão "Gerando..." */
+.btn.loading {
+    background-color: #588384; 
+    cursor: not-allowed;
+    transform: scale(1.0);
+}
+
+/* Logo (Canto superior esquerdo) */
+.header-logo-link {
+    position: absolute; 
+    top: 25px;
+    left: 25px;
+    display: block; 
+    z-index: 10;
+}
+.header-logo-link .logo-img {
+    width: 80px; 
+    height: auto;
+    display: block;
+}
+
+/* Botão de Fechar (Canto superior direito) */
+.close-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 50px;
+    height: 50px;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-size: 2.5rem; 
+    font-weight: 300;
+    line-height: 1;
+    transition: transform 0.3s ease;
+    z-index: 10;
+}
+.close-btn:hover {
+    transform: scale(1.1);
+}
+
+/* --- Estrutura das Páginas --- */
+#splash-page, #sobre-page, #digitar-page, #falar-page, #resultado-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; 
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* --- Página: Splash (index.html) --- */
+.splash-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.logo-main {
+    width: 180px; 
+    height: auto;
+    margin-bottom: 25px;
+}
+.welcome-text {
+    font-size: 3rem;
+    font-weight: 600;
+    color: #eaf0f2;
+    margin: 0;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Página: Sobre (sobre.html) --- */
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%; 
+    max-width: 650px; 
+}
+.info-card {
+    width: 100%;
+    background-color: #6a9a9b; 
+    padding: 30px 40px;
+    border-radius: 40px; 
+    margin-bottom: 30px;
+    text-align: left; 
+    box-sizing: border-box;
+}
+.info-card h2 {
+    color: #cbeef0; 
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+.info-card p {
+    color: #ffffff;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0;
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; 
+}
+
+/* --- Página: Digitar (digitar.html) --- */
+.text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; 
+    width: 90%;
+    max-width: 500px;
+}
+.text-card {
+    width: 100%;
+    height: 350px;
+    background-color: #6a9a9b; 
+    padding: 25px;
+    border-radius: 40px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.text-card label {
+    color: #000; 
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.text-card textarea {
+    flex-grow: 1; 
+    width: 100%;
+    border: none;
+    border-radius: 20px; 
+    background-color: #cddfdf; 
+    padding: 15px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    resize: none; 
+}
+.text-card textarea:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
+}
+
+/* --- Página: Falar (falar.html) --- */
+.voice-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px; 
+}
+.voice-container h3 {
+    color: #eaf0f2;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+    min-height: 1.5em; /* Evita que o layout pule */
+}
+.voice-circle {
+    width: 300px;
+    height: 300px;
+    background-color: #6a9a9b; 
+    border-radius: 50%;
+    border: 8px solid #cddfdf; 
+}
+.voice-animation {
+    display: none; /* Começa escondido */
+    gap: 20px; 
+    height: 60px;
+    align-items: flex-end; 
+}
+.voice-animation span {
+    width: 30px;
+    border-radius: 20px;
+    background-color: #6a9a9b;
+    animation: voice-wave 1.2s infinite ease-in-out; 
+}
+
+.voice-animation span:nth-child(1) {
+    height: 40px;
+    animation-delay: 0s;
+}
+.voice-animation span:nth-child(2) {
+    height: 20px;
+    animation-delay: 0.2s;
+}
+.voice-animation span:nth-child(3) {
+    height: 40px;
+    animation-delay: 0.4s;
+}
+
+@keyframes voice-wave {
+    0%, 100% { height: 20px; }
+    50% { height: 60px; }
+}
+
+.mic-btn {
+    width: 70px;
+    height: 70px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.mic-btn:hover {
+    transform: scale(1.1);
+}
+.mic-btn svg {
+    width: 30px;
+    height: 30px;
+    fill: #333; 
+}
+/* Estilo do botão "Gravando..." (fica vermelho) */
+.mic-btn.recording {
+    background-color: #e63946; /* Vermelho para gravar */
+    transform: scale(1.1);
+}
+.mic-btn.recording svg {
+    fill: #ffffff;
+}
+
+/* Estilo do botão "Processando..." (fica cinza) */
+.mic-btn.processing {
+    background-color: #a8dadc;
+    cursor: not-allowed;
+}
+
+/* --- NOVO ESTILO PARA O BOTÃO PARAR --- */
+#parar-btn {
+    display: none; /* Começa escondido */
+    background-color: #e63946; /* Cor vermelha para "Parar" */
+}
+#parar-btn:hover {
+    background-color: #d00000; /* Vermelho mais escuro no hover */
+}
+
+
+/* --- Página: Resultado (ambas) --- */
+.resultado-container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* Faz os cartões terem a mesma altura */
+    gap: 30px;
+    width: 90%;
+    max-width: 900px;
+}
+
+.resultado-card-ia,
+.resultado-card-imagem {
+    flex: 1; /* Faz os dois cartões dividirem o espaço */
+    background-color: #6a9a9b;
+    border-radius: 40px;
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Cartão da Esquerda (Texto ou Áudio) */
+.resultado-card-ia {
+    background-color: #cddfdf;
+    color: #0a282d;
+    text-align: left;
+}
+.resultado-card-ia h3 {
+    margin: 0;
+    font-size: 1.3rem;
+}
+.resultado-card-ia p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* Cartão da Direita (Imagem) */
+.resultado-card-imagem {
+    padding: 15px; /* Menos padding para a imagem */
+}
+.resultado-card-imagem img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1; /* Força a imagem a ser quadrada */
+    border-radius: 30px;
+    object-fit: cover; /* Garante que a imagem cubra o espaço */
+    display: block;
+}
+
+/* --- Responsividade (Celular) --- */
+@media (max-width: 768px) {
+    .resultado-container {
+        flex-direction: column; /* Empilha os cartões */
+        height: 80vh; /* Altura da tela */
+    }
+    
+    .resultado-card-ia,
+    .resultado-card-imagem {
+        flex-basis: auto; /* Reseta a base flex */
+    }
+
+    .resultado-card-ia {
+        flex-grow: 1; /* Deixa o cartão de texto crescer */
+        overflow-y: auto; /* Adiciona scroll se o texto for longo */
+    }
+    
+    .resultado-card-imagem {
+        flex-grow: 0;
+        flex-shrink: 0;
+        padding: 10px;
+    }
+
+    .resultado-card-imagem img {
+        max-height: 300px; /* Limita altura da imagem */
+    }
+
+    .button-container {
+        flex-direction: column;
+    }
+    
+    .voice-circle {
+        width: 250px;
+        height: 250px;
+    }
+
+    .close-btn {
+        top: 15px;
+        right: 15px;
+    }
+
+    .header-logo-link {
+        top: 15px;
+        left: 15px;
+    }
+}
