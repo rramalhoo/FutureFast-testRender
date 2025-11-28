@@ -8,16 +8,23 @@ from urllib.parse import unquote
 import io # Importe o 'io' se não estiver lá, embora 'read()' deva funcionar sem ele
 
 # Supondo que 'config.py' está na mesma pasta e tem as chaves
+import os # Adicione 'os' no topo do seu arquivo
+
 try:
-    from config import OPENAI_API_KEY, OPENAI_ORGANIZATION
-    client = OpenAI(
-        api_key=OPENAI_API_KEY,
-        organization=OPENAI_ORGANIZATION
-    )
-except ImportError:
-    print("ERRO: Arquivo 'config.py' não encontrado ou chaves não configuradas.")
-    print("Por favor, crie 'config.py' com OPENAI_API_KEY e OPENAI_ORGANIZATION.")
-    client = None # Define como None para evitar erros piores se o app rodar
+    OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+    OPENAI_ORGANIZATION = os.environ.get('OPENAI_ORGANIZATION')
+    
+    if not OPENAI_API_KEY or not OPENAI_ORGANIZATION:
+        print("ERRO: Variáveis de ambiente OPENAI_API_KEY ou OPENAI_ORGANIZATION não configuradas.")
+        client = None
+    else:
+        client = OpenAI(
+            api_key=OPENAI_API_KEY,
+            organization=OPENAI_ORGANIZATION
+        )
+except Exception as e:
+    print(f"Erro ao iniciar cliente OpenAI: {e}")
+    client = None
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 CORS(app)
@@ -136,7 +143,7 @@ def gerar_solucao_e_imagem():
             f.write(base64.b64decode(b64_imagem))
         print(f"Imagem salva em: {filepath}")
 
-        local_url = f"http://127.0.0.1:5000/imagem/{filename}"
+        local_url = f"/imagem/{filename}"
 
         return jsonify({
             "texto_solucao": texto_solucao,
@@ -236,7 +243,7 @@ def gerar_solucao_audio():
         img_filepath = os.path.join("imagens", img_filename)
         with open(img_filepath, "wb") as f:
             f.write(base64.b64decode(b64_imagem))
-        img_local_url = f"http://127.0.0.1:5000/imagem/{img_filename}"
+        img_local_url = f"/{img_filename}"
         print(f"Imagem salva em: {img_filepath}")
 
         # --- 6. Gerar Áudio da Solução (TTS) ---
@@ -257,7 +264,7 @@ def gerar_solucao_audio():
         resposta_audio.stream_to_file(audio_filepath)
         print(f"Áudio da solução salvo em: {audio_filepath}")
         
-        audio_local_url = f"http://127.0.0.1:5000/audio/{audio_filename}"
+        audio_local_url = f"/{audio_filename}"
 
         return jsonify({
             "audio_url": audio_local_url,
